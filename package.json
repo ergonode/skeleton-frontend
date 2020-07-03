@@ -29,12 +29,7 @@
         "modules:all": "./lib/index.js modules-all"
     },
     "dependencies": {
-        "@ergonode/activity-logs": "^0.8.2",
-        "@ergonode/authentication": "^0.8.2",
         "@ergonode/available-modules": "^0.8.0",
-        "@ergonode/core": "^0.8.6",
-        "@ergonode/dashboard": "^0.8.3",
-        "@ergonode/users": "^0.8.2",
         "chalk": "^3.0.0",
         "clear": "^0.1.0",
         "cli-spinner": "^0.2.10",
