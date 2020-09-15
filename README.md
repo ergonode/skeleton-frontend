@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://ergonode.com">
-    <img src="https://img.shields.io/badge/version-0.8.0-4c9aff.svg" alt="Version">
+    <img src="https://img.shields.io/badge/version-0.10.0-4c9aff.svg" alt="Version">
   </a>
   <a href="https://ergonode.com">
     <img src="https://img.shields.io/badge/version%20code-Vegas-00bc87.svg" alt="Code Version">
@@ -21,17 +21,21 @@
   <a href="https://github.com/ergonode/frontend/blob/master/LICENSE.txt">
     <img src="https://img.shields.io/github/license/ergonode/frontend.svg" alt="License">
   </a>
+  <a href="https://lerna.js.org">
+    <img src="https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg" alt="Lerna">
+  </a>
 </p>
 <br>
 
 ## Installation
+
 
 **1) Startup**
 
 Clone project repository to your local directory:
 
 ```bash
-git clone git@github.com:ergonode/skeleton-frontend.git
+git clone git@github.com:ergonode/frontend.git
 ```
 
 Install project dependencies:
