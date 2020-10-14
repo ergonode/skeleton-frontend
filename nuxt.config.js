@@ -15,7 +15,7 @@ const IS_DEV = process.env.NODE_ENV !== 'production';
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:8000';
 
 module.exports = {
-    mode: 'universal',
+    ssr: true,
     dev: IS_DEV,
     head: {
         htmlAttrs: {
@@ -23,10 +23,23 @@ module.exports = {
         },
         title: 'Ergonode',
         meta: [
-            { charset: 'utf-8' },
-            { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-            { hid: 'keywords', name: 'keywords', content: keywords.join(', ') },
-            { hid: 'description', name: 'description', content: description },
+            {
+                charset: 'utf-8',
+            },
+            {
+                name: 'viewport',
+                content: 'width=device-width, initial-scale=1',
+            },
+            {
+                hid: 'keywords',
+                name: 'keywords',
+                content: keywords.join(', '),
+            },
+            {
+                hid: 'description',
+                name: 'description',
+                content: description,
+            },
         ],
         link: [
             {
@@ -43,8 +56,18 @@ module.exports = {
             },
         ],
     },
-    loading: { color: '#00BC87', height: '3px' },
-    modulesDir: ['node_modules', 'modules'],
+    pageTransition: {
+        name: 'page',
+        mode: 'out-in',
+    },
+    loading: {
+        color: '#00BC87',
+        height: '3px',
+    },
+    modulesDir: [
+        'node_modules',
+        'modules',
+    ],
     buildModules: [
         '@ergonode/vuems',
         '@nuxtjs/router',
@@ -52,16 +75,48 @@ module.exports = {
     modules: [
         '@nuxtjs/axios',
         '@nuxtjs/style-resources',
-        ['@nuxtjs/component-cache', { maxAge: 1000 * 60 * 60 }],
+        [
+            '@nuxtjs/component-cache',
+            {
+                maxAge: 1000 * 60 * 60,
+            },
+        ],
         'cookie-universal-nuxt',
+        'nuxt-i18n',
     ],
     vuems: {
         required: modulesConfig.required,
         modules: modulesConfig,
+        i18n: true,
+        i18nLocales: [
+            'en_GB',
+            'pl_PL',
+        ],
         isDev: process.env.NODE_ENV !== 'production',
     },
+    i18n: {
+        locales: [
+            {
+                code: 'en_GB',
+                file: 'en_GB.json',
+            },
+            {
+                code: 'pl_PL',
+                file: 'pl_PL.json',
+            },
+        ],
+        defaultLocale: 'en_GB',
+        vueI18n: {
+            fallbackLocale: 'en_GB',
+        },
+        lazy: true,
+        langDir: '.nuxt/locales/',
+        strategy: 'no_prefix',
+    },
     router: {
-        middleware: ['modulesMiddlewareLoader'],
+        middleware: [
+            'modulesMiddlewareLoader',
+        ],
     },
     axios: {
         baseURL: BASE_URL || 'http://localhost:8000',
@@ -73,7 +128,9 @@ module.exports = {
         parallel: true,
         cssSourceMap: false,
         optimizeCSS: true,
-        extend(config, { isDev, isClient }) {
+        extend(config, {
+            isDev, isClient, loaders,
+        }) {
             const alias = config.resolve.alias || {};
 
             alias['@Root'] = join(__dirname, './');
@@ -98,6 +155,32 @@ module.exports = {
                     config.plugins[i].options.chunksSortMode = 'none';
                 }
             }
+
+            // remove Cypress e2e ids when not needed
+            loaders.vue.compilerOptions = {
+                modules: [
+                    {
+                        preTransformNode(astEl) {
+                            if (process.env.NODE_ENV === 'production' && !process.env.LEAVE_TEST_TAG_ATTRS) {
+                                const id = 'data-cy';
+                                const {
+                                    attrsMap, attrsList,
+                                } = astEl;
+
+                                if (attrsMap[id]) {
+                                    delete attrsMap[id];
+
+                                    const index = attrsList.findIndex(
+                                        x => x.name === id,
+                                    );
+                                    attrsList.splice(index, 1);
+                                }
+                            }
+                            return astEl;
+                        },
+                    },
+                ],
+            };
         },
         optimization: {
             splitChunks: {
@@ -117,5 +200,6 @@ module.exports = {
         VUE_APP_VERSION: version,
         VUE_APP_GIT_INFO: getRepoInfo(),
         SHOW_RELEASE_INFO: process.env.SHOW_RELEASE_INFO || false,
+        LEAVE_TEST_TAG_ATTRS: process.env.LEAVE_TEST_TAG_ATTRS || false,
     },
 };
