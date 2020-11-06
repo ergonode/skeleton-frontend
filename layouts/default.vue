@@ -1,7 +1,7 @@
 /*
- * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
- * See LICENSE for license details.
- */
+* Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
+* See LICENSE for license details.
+*/
 <template>
     <DefaultLayout>
         <nuxt />
@@ -43,10 +43,10 @@ export default {
         if (emptyState > 0) {
             await Promise.all([
                 store.dispatch('dictionaries/getDictionaries'),
-                store.dispatch('core/getLanguages'),
+                store.dispatch('core/getLanguages', {}),
             ]);
 
-            await store.dispatch('core/getLanguageTree');
+            await store.dispatch('core/getLanguageTree', {});
             await store.dispatch('core/setDefaultLanguage');
         }
 

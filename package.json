@@ -1,6 +1,6 @@
 {
     "name": "skeleton-frontend",
-    "version": "1.0.0-beta.2",
+    "version": "1.0.0-beta.3",
     "description": "Ergonode skeleton - Desktop PWA Ready Product Information Management Platform",
     "license": "OSL-3.0",
     "keywords": [
@@ -30,8 +30,8 @@
     },
     "dependencies": {
         "@babel/register": "^7.12.0",
-        "@ergonode/vuems": "^0.11.0",
         "@ergonode/available-modules": "^0.8.0",
+        "@ergonode/vuems": "^0.11.0",
         "@nuxtjs/axios": "^5.12.2",
         "@nuxtjs/component-cache": "^1.1.6",
         "@nuxtjs/router": "^1.5.0",
@@ -57,8 +57,8 @@
         "fs-extra": "^9.0.1",
         "git-repo-info": "^2.1.1",
         "inquirer": "^7.3.3",
-        "nuxt": "^2.14.6",
-        "nuxt-i18n": "^6.15.3",
+        "nuxt": "^2.14.7",
+        "nuxt-i18n": "^6.15.4",
         "registry-url": "^5.1.0",
         "tiptap": "^1.30.0",
         "tiptap-extensions": "^1.33.1",
