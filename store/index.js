@@ -3,26 +3,31 @@
  * See LICENSE for license details.
  */
 import {
-    JWT_KEY,
+    REFRESH_TOKEN_KEY,
+    TOKEN_KEY,
 } from '@Authentication/defaults/cookies';
 
 export const actions = {
     async nuxtServerInit({
         dispatch,
     }) {
-        try {
-            const token = this.$cookies.get(JWT_KEY) || null;
+        const token = this.$cookies.get(TOKEN_KEY) || null;
+        const refreshToken = this.$cookies.get(REFRESH_TOKEN_KEY) || null;
 
-            await dispatch('authentication/__setState', {
-                key: 'jwt',
-                value: token,
-            });
-            if (token) {
-                await dispatch('authentication/getUser');
+        dispatch('authentication/setTokens', {
+            token,
+            refreshToken,
+        });
+
+        if (token) {
+            try {
+                await dispatch('authentication/getUser', {});
+                await dispatch('core/getLanguages', {});
+                await dispatch('core/getLanguageTree', {});
+                await dispatch('core/setDefaultLanguage');
+            } catch (e) {
+                console.error(e);
             }
-        } catch (e) {
-            // TODO: There should be refresh token request
-            console.error(e);
         }
     },
 };
