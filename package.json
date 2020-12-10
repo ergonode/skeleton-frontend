@@ -1,6 +1,6 @@
 {
     "name": "skeleton-frontend",
-    "version": "1.0.0-beta.5",
+    "version": "1.0.0-beta.6",
     "description": "Ergonode skeleton - Desktop PWA Ready Product Information Management Platform",
     "license": "OSL-3.0",
     "keywords": [
@@ -61,7 +61,7 @@
         "tiptap": "^1.30.0",
         "tiptap-extensions": "^1.33.2",
         "vue-chartjs": "^3.5.1",
-        "vue-windowing": "^0.5.5",
+        "vue-windowing": "^0.9.1",
         "vuex": "^3.5.1"
     },
     "devDependencies": {
