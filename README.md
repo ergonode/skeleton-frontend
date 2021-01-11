@@ -36,7 +36,7 @@
 Clone project repository to your local directory:
 
 ```bash
-git clone git@github.com:ergonode/frontend.git
+git clone git@github.com:ergonode/skeleton-frontend.git
 ```
 
 Install project dependencies:
