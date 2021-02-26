@@ -13,6 +13,7 @@ dotenv.config({ path: '.env' });
 
 const IS_DEV = process.env.NODE_ENV !== 'production';
 const BASE_URL = process.env.API_BASE_URL || 'http://localhost:8000';
+const PARALLEL = process.env.PARALLEL || false;
 
 module.exports = {
     ssr: true,
@@ -115,7 +116,7 @@ module.exports = {
         babel: {
             configFile: './babel.config.js',
         },
-        parallel: true,
+        parallel: PARALLEL,
         cssSourceMap: false,
         optimizeCSS: true,
         extend(config, {
