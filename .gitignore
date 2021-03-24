@@ -1,15 +1,21 @@
 # dependencies
 node_modules
 report
+vendor
+modules
 
 # tests
 coverage
 screenshotsFolder
 videosFolder
 cypress.env.json
+cypress/videos
 
 # logs
 npm-debug.log
+lerna-debug.log
+yarn-error.log
+**/npm-debug.log
 
 # Nuxt build
 .nuxt
@@ -34,10 +40,6 @@ ftp
 
 # misc
 .DS_Store
-lerna-debug.log
-npm-debug.log
-yarn-error.log
-**/npm-debug.log
 .env
 
 # configurations
@@ -46,6 +48,4 @@ config/*
 # exception to the rule
 !config/.copyright
 modules.config.js
-vendor
-cypress/videos
 .huskyrc
