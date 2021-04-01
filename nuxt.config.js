@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 /*
- * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
+ * Copyright © Ergonode Sp. z o.o. All rights reserved.
  * See LICENSE for license details.
  */
 import { join } from 'path';
@@ -74,7 +74,7 @@ module.exports = {
         '@nuxtjs/router',
     ],
     modules: [
-        '@nuxtjs/axios',
+        'nuxt-i18n',
         '@nuxtjs/style-resources',
         [
             '@nuxtjs/component-cache',
@@ -83,7 +83,7 @@ module.exports = {
             },
         ],
         'cookie-universal-nuxt',
-        'nuxt-i18n',
+        '@nuxtjs/axios',
     ],
     vuems: {
         required: modulesConfig.required,
@@ -96,11 +96,15 @@ module.exports = {
         isDev: process.env.NODE_ENV !== 'production',
     },
     i18n: {
+        locales: [
+            'en_GB',
+            'pl_PL',
+        ],
+        defaultLocale: 'en_GB',
         vueI18n: {
-            locale: 'en_GB',
             fallbackLocale: 'en_GB',
-            silentTranslationWarn: true,
         },
+        parsePages: false,
         vuex: false,
         strategy: 'no_prefix',
     },
@@ -117,10 +121,44 @@ module.exports = {
             configFile: './babel.config.js',
         },
         parallel: PARALLEL,
-        cssSourceMap: false,
+        cssSourceMap: true,
         optimizeCSS: true,
+        loaders: {
+            css: {
+                modules: {
+                    compileType: 'icss',
+                },
+            },
+            vue: {
+                compilerOptions: {
+                    modules: [
+                        {
+                            preTransformNode(astEl) {
+                                if (process.env.NODE_ENV === 'production' && !process.env.LEAVE_TEST_TAG_ATTRS) {
+                                    const id = 'data-cy';
+                                    const {
+                                        attrsMap, attrsList,
+                                    } = astEl;
+
+                                    if (attrsMap[id]) {
+                                        delete attrsMap[id];
+
+                                        const index = attrsList.findIndex(
+                                            x => x.name === id,
+                                        );
+                                        attrsList.splice(index, 1);
+                                    }
+                                }
+                                return astEl;
+                            },
+                        },
+                    ],
+                },
+            },
+        },
         extend(config, {
-            isDev, isClient, loaders,
+            isDev,
+            isClient,
         }) {
             const alias = config.resolve.alias || {};
 
@@ -131,46 +169,9 @@ module.exports = {
             if (isDev) {
                 config.devtool = isClient ? 'source-map' : 'inline-source-map';
             }
-            config.module.rules.push(
-                {
-                    test: /\.ejs$/,
-                    loader: 'ejs-loader',
-                },
-            );
+
             config.node = {
                 fs: 'empty',
-            };
-
-            for (let i = 0; i < config.plugins.length; i += 1) {
-                if (config.plugins[i].constructor.name === 'HtmlWebpackPlugin') {
-                    config.plugins[i].options.chunksSortMode = 'none';
-                }
-            }
-
-            // remove Cypress e2e ids when not needed
-            loaders.vue.compilerOptions = {
-                modules: [
-                    {
-                        preTransformNode(astEl) {
-                            if (process.env.NODE_ENV === 'production' && !process.env.LEAVE_TEST_TAG_ATTRS) {
-                                const id = 'data-cy';
-                                const {
-                                    attrsMap, attrsList,
-                                } = astEl;
-
-                                if (attrsMap[id]) {
-                                    delete attrsMap[id];
-
-                                    const index = attrsList.findIndex(
-                                        x => x.name === id,
-                                    );
-                                    attrsList.splice(index, 1);
-                                }
-                            }
-                            return astEl;
-                        },
-                    },
-                ],
             };
         },
         optimization: {
