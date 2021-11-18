@@ -3,7 +3,7 @@
  * Copyright © Bold Brand Commerce Sp. z o.o. All rights reserved.
  * See LICENSE for license details.
  */
-import { join } from 'path';
+import webpack from 'webpack';
 import { keywords, description, version } from './package';
 import modulesConfig from './modules.config';
 
@@ -68,6 +68,14 @@ module.exports = {
         '@ergonode/vuems',
         '@nuxtjs/router',
     ],
+    polyfill: {
+        features: [
+            {
+                require: 'intersection-observer',
+                detect: () => 'IntersectionObserver' in window,
+            },
+        ],
+    },
     modules: [
         'nuxt-i18n',
         '@nuxtjs/style-resources',
@@ -79,6 +87,7 @@ module.exports = {
         ],
         'cookie-universal-nuxt',
         '@nuxtjs/axios',
+        'nuxt-polyfill',
     ],
     vuems: {
         required: modulesConfig.required,
@@ -112,6 +121,9 @@ module.exports = {
         baseURL: 'http://localhost:8000',
     },
     build: {
+        plugins: [
+            new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        ],
         babel: {
             configFile: './babel.config.js',
         },
@@ -150,10 +162,6 @@ module.exports = {
             isDev,
             isClient,
         }) {
-            const alias = config.resolve.alias || {};
-
-            alias['@Vendor'] = join(__dirname, '/vendor');
-
             if (isDev) {
                 config.devtool = isClient ? 'source-map' : 'inline-source-map';
             }
@@ -165,7 +173,7 @@ module.exports = {
         optimization: {
             splitChunks: {
                 chunks: 'all',
-                maxSize: 200000,
+                maxSize: 249856,
             },
         },
     },
@@ -183,7 +191,6 @@ module.exports = {
         SHOW_RELEASE_INFO: process.env.SHOW_RELEASE_INFO || false,
         LEAVE_TEST_TAG_ATTRS: process.env.LEAVE_TEST_TAG_ATTRS || true,
     },
-
     privateRuntimeConfig: {
         axios: {
             baseURL: process.env.API_BASE_URL,
